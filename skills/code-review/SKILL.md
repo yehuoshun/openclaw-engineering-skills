@@ -57,6 +57,14 @@ Each smell reads *what it is* → *how to fix*; match it against the diff:
 
 ### 4. Spawn both sub-agents in parallel
 
+Two sub-agents, **one per axis**, launched in the same turn so they overlap:
+
+- **OpenClaw**: `sessions_spawn` with `runtime="subagent"`, `mode="run"`, a distinct `label` per axis (`standards-review`, `spec-review`), and the axis brief as `task`. Emit both calls in a single turn, then `sessions_yield` and collect both results before aggregating.
+- **Other harnesses**: whatever your equivalent of a fresh-context child agent is (a Task tool, `codex exec`, a second `claude -p` process).
+- **No sub-agents available**: run the two axes serially yourself — one axis per pass — and keep the two findings lists physically separate. Losing the isolation is acceptable; what must never happen is reviewing both axes in one pass and blurring them together.
+
+Never answer both axis briefs yourself in one context: the point of the split is context isolation.
+
 **Standards sub-agent prompt** should include:
 
 - The full diff command and commit list.
