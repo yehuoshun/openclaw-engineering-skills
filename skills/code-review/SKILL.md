@@ -26,10 +26,10 @@ Before going further, confirm the fixed point resolves (`git rev-parse <fixed-po
 
 Look for the originating spec, in this order:
 
-1. Issue references in the commit messages (`#123`, `Closes #45`, GitLab `!67`, etc.), fetched from the issue tracker if configured.
+1. Issue references in the commit messages (`#123`, `Closes #45`, GitLab `!67`, etc.) — fetch them with `gh issue view <n>` / `gh pr view <n>` when `gh` is available and authenticated.
 2. A path the user passed as an argument.
 3. A spec file under `docs/`, `specs/`, or `.scratch/` matching the branch name or feature.
-4. If nothing is found, ask the user where the spec is. If they say there isn't one, the **Spec** sub-agent will skip and report "no spec available".
+4. If nothing is found, ask the user where the spec is. Don't reconstruct a spec from the diff — a spec derived from the change makes this axis tautological. If they confirm there isn't one, skip the Spec sub-agent and report "no spec available".
 
 ### 3. Identify the standards sources
 
