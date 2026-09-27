@@ -22,6 +22,16 @@ cp -r skills/* ~/.openclaw/workspace/skills/
 
 重启 gateway 或新开会话后生效。
 
+## 本地校验
+
+改完 skill 先本地跑一遍（同一个脚本也在 CI 里跑）：
+
+```bash
+python3 scripts/lint-skills.py
+```
+
+只查会让 skill **静默失效**的东西：frontmatter 可解析、`name` 与目录名一致、`description` 非空且 ≤1024 字符、markdown 链接可解析、正文里 `scripts/` `references/` `assets/` `lib/` 下的引用文件存在、`*.sh` 通过 `bash -n`。不检查措辞与格式。
+
 ## 触发方式
 
 直接说需求即可，例如：

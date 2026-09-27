@@ -1,0 +1,23 @@
+name: lint-skills
+
+on:
+  push:
+    paths:
+      - 'skills/**'
+      - 'scripts/lint-skills.py'
+      - '.github/workflows/lint-skills.yml'
+  pull_request:
+    paths:
+      - 'skills/**'
+      - 'scripts/lint-skills.py'
+      - '.github/workflows/lint-skills.yml'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # checkout 需要；除此之外一概不给
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Lint skills
+        run: python3 scripts/lint-skills.py
