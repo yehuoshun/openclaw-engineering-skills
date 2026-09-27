@@ -22,6 +22,8 @@ cp -r skills/* ~/.openclaw/workspace/skills/
 
 重启 gateway 或新开会话后生效。
 
+每个 skill 目录自带一份 `LICENSE`（MIT，© Matt Pocock，与仓库根逐字节一致），`cp -r` 会一并装走，满足 MIT 的"声明随副本分发"要求。`scripts/lint-skills.py` 会强制这一点。
+
 ## 本地校验
 
 改完 skill 先本地跑一遍（同一个脚本也在 CI 里跑）：

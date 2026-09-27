@@ -14,6 +14,10 @@ Per `skills/*/SKILL.md`:
      `assets/`, `lib/`) exists. Bare names such as `CONTEXT.md` or `docs/` are
      references to the *user's* repo, not ours, so they are not checked.
   6. every `*.sh` passes `bash -n`
+  7. each skill directory carries a `LICENSE` byte-identical to the repo-root one
+     — MIT requires the notice to travel with copies, and `cp -r skills/*` is how
+     these get installed elsewhere, so the notice has to live inside the skill
+     directory itself. Root-only is easy to forget and impossible to check.
 
 Usage (from anywhere):  python3 scripts/lint-skills.py
 """
@@ -27,6 +31,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS = ROOT / "skills"
+ROOT_LICENSE = ROOT / "LICENSE"
 LOCAL_PREFIXES = ("scripts/", "references/", "assets/", "lib/")
 MAX_DESC = 1024
 
@@ -58,7 +63,6 @@ def parse_frontmatter(text: str) -> dict[str, str] | None:
 def lint_skill(skill_md: Path) -> None:
     name = skill_md.parent.name
     text = skill_md.read_text(encoding="utf-8")
-
     fm = parse_frontmatter(text)
     if fm is None:
         err(name, "SKILL.md 没有可解析的 frontmatter（文件需以 --- 开头）")
@@ -92,8 +96,18 @@ def lint_skill(skill_md: Path) -> None:
             detail = (proc.stderr.strip().splitlines() or [""])[-1]
             err(name, f"bash -n 失败: {sh.relative_to(ROOT)} :: {detail}")
 
+    lic = skill_md.parent / "LICENSE"
+    if not lic.exists():
+        err(name, "缺少 LICENSE（MIT 声明需随副本分发）")
+    elif lic.read_bytes() != ROOT_LICENSE.read_bytes():
+        err(name, "LICENSE 与根目录 LICENSE 不一致")
+
 
 def main() -> int:
+    if not ROOT_LICENSE.exists():
+        print(f"✗ 根目录缺少 LICENSE: {ROOT_LICENSE}")
+        return 1
+
     skill_files = sorted(SKILLS.glob("*/SKILL.md"))
     if not skill_files:
         print(f"✗ 在 {SKILLS} 下没找到任何 skills/*/SKILL.md")
