@@ -20,6 +20,8 @@ Whatever the user said is the fixed point (a commit SHA, branch name, tag, `main
 
 Capture the diff command once: `git diff <fixed-point>...HEAD` (three-dot, so the comparison is against the merge-base). Also note the list of commits via `git log <fixed-point>..HEAD --oneline`.
 
+If the user is reviewing **WIP** (uncommitted work), the three-dot diff misses it — uncommitted changes live outside `HEAD`. In that case also run `git diff HEAD` (staged + unstaged) and hand that hunk set to the sub-agents alongside the committed diff.
+
 Before going further, confirm the fixed point resolves (`git rev-parse <fixed-point>`) and the diff is non-empty. A bad ref or empty diff should fail here, not inside two parallel sub-agents.
 
 ### 2. Identify the spec source
@@ -64,6 +66,8 @@ Two sub-agents, **one per axis**, launched in the same turn so they overlap:
 - **No sub-agents available**: run the two axes serially yourself — one axis per pass — and keep the two findings lists physically separate. Losing the isolation is acceptable; what must never happen is reviewing both axes in one pass and blurring them together.
 
 Never answer both axis briefs yourself in one context: the point of the split is context isolation.
+
+If the combined diff is too large for one sub-agent context (thousands of lines), split it by file or by commit range into several sub-agent pairs, then aggregate the slice reports.
 
 **Standards sub-agent prompt** should include:
 

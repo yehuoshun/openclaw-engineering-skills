@@ -20,6 +20,8 @@
 cp -r skills/* ~/.openclaw/workspace/skills/
 ```
 
+> ⚠️ `cp -r skills/*` 会**覆盖**本地同名 skill 目录（code-review / diagnosing-bugs / tdd）。装前先备份或确认本地副本没有未提交的本地修改。
+
 重启 gateway 或新开会话后生效。
 
 每个 skill 目录自带一份 `LICENSE`（MIT，© Matt Pocock，与仓库根逐字节一致），`cp -r` 会一并装走，满足 MIT 的"声明随副本分发"要求。`scripts/lint-skills.py` 会强制这一点。

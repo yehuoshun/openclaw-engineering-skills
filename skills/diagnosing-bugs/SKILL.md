@@ -117,7 +117,7 @@ Write the regression test **before the fix**, but only if there is a **correct s
 
 A correct seam is one where the test exercises the **real bug pattern** as it occurs at the call site. If the only available seam is too shallow (single-caller test when the bug needs multiple callers, unit test that can't replicate the chain that triggered the bug), a regression test there gives false confidence.
 
-**If no correct seam exists, that itself is the finding.** Note it. The codebase architecture is preventing the bug from being locked down. Flag this for the next phase.
+**If no correct seam exists, that itself is the finding.** Note it and flag it to the user in the final report: the codebase architecture is preventing the bug from being locked down. The absence of a seam is a debt for the review stage, not a Phase 6 cleanup item.
 
 If a correct seam exists:
 
